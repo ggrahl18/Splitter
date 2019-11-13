@@ -11,12 +11,6 @@ module.exports = {
       port: 7545,
       network_id: "*", // Match any network id
       gas: 5000000
-    },
-    net42: {
-      host: "localhost",
-      port: 7545,
-      network_id: 42,
-      gas: 5000000
     }
   },
   compilers: {
@@ -25,3 +19,10 @@ module.exports = {
     }
   }
 };
+
+//     net42: {
+// host: "localhost",
+//   port: 8545,
+//     network_id: 42,
+//       gas: 5000000
+//     }
