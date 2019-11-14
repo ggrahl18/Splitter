@@ -21,17 +21,17 @@ contract Splitter {
 			msg.sender == _account,
 			"You are not Alice!"
 		);
+		_;
 	}
 
 	function changeAlice(address _newAlice) public onlyAlice(alice) {
 		alice = _newAlice;
 	}
 	
-	function splitBalance(address bob, address carol) public payable onlyAlice {
+	function splitBalance(address bob, address carol) public payable {
 		// Security checks
 		require(msg.value > 0);
 		require(bob != carol);
-		require(carol != address(0));
 		require(msg.sender != bob && msg.sender != carol);
 
         // Splits funds and allocates to bob & carol.
@@ -47,12 +47,12 @@ contract Splitter {
 		emit LogSplit(msg.sender, bob, carol, msg.value);
 	}
 	
-	// Withdraws funds.
-	function withdraw() public payable onlyAlice {
+	function withdraw() public returns(bool success) {
 		uint amount = owedBalances[msg.sender];
-	    require (amount > 0);
+	    require (owedBalances[msg.sender] > 0);
 		owedBalances[msg.sender] = 0;
 		msg.sender.transfer(amount);
 		emit LogWithdraw(msg.sender, amount);
+		return true;
 	}
 }
