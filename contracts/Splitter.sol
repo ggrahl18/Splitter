@@ -5,6 +5,8 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 contract Splitter {
 	using SafeMath for uint;
 
+	address public alice = msg.sender;
+
 	mapping (address => uint) public owedBalances;
 
 	event LogSplit(address indexed caller, address indexed address1, address indexed address2, uint amount);
@@ -13,8 +15,19 @@ contract Splitter {
 	constructor() public {
         // Haven't found a use for this yet.
     }
+
+	modifier onlyAlice(address _account) {
+		require(
+			msg.sender == _account,
+			"You are not Alice!"
+		);
+	}
+
+	function changeAlice(address _newAlice) public onlyAlice(alice) {
+		alice = _newAlice;
+	}
 	
-	function splitBalance(address bob, address carol) public payable {
+	function splitBalance(address bob, address carol) public payable onlyAlice {
 		// Security checks
 		require(msg.value > 0);
 		require(bob != carol);
@@ -35,7 +48,7 @@ contract Splitter {
 	}
 	
 	// Withdraws funds.
-	function withdraw() public payable {
+	function withdraw() public payable onlyAlice {
 		uint amount = owedBalances[msg.sender];
 	    require (amount > 0);
 		owedBalances[msg.sender] = 0;
