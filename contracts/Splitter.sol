@@ -18,6 +18,7 @@ contract Splitter is Pausable {
 	function splitBalance(address bob, address carol) public payable currentlyRunning onlyAlice {
 		// Security checks
 		require(msg.value > 0);
+		require(msg.value % 2 == 0, "Must send an amount divisible by two.");
 		require(bob != carol);
 		require(msg.sender != bob && msg.sender != carol);
 
