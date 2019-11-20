@@ -7,6 +7,7 @@ contract Splitter is Pausable {
 	using SafeMath for uint;
 
 	address public _alice = msg.sender;
+	bytes public fail;
 
 	mapping (address => uint) public owedBalances;
 
@@ -14,19 +15,13 @@ contract Splitter is Pausable {
 	event LogWithdraw(address indexed from, uint amount);
 	event LogFail(bytes amount, address indexed from);
 
-	constructor() public {
-		bytes public fail;
-	}
+	constructor() public {}
 	
-	function () public payable {
+	function () external payable {
 		fail = msg.data;
 		emit LogFail(msg.data, msg.sender);
 	}
-
-	function getFail() public view returns (bytes) {
-		return fail;
-	}
-
+	
 	function splitBalance(address bob, address carol) public payable currentlyRunning onlyAlice {
 		// Security checks
 		require(msg.value > 0);
