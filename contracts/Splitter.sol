@@ -1,7 +1,7 @@
 pragma solidity ^0.5.12;
 
 import "@openzeppelin/contracts/math/SafeMath.sol";
-import "./Ownable.sol";
+import "./Pausable.sol";
 
 contract Splitter is Pausable {
 	using SafeMath for uint;
@@ -12,9 +12,21 @@ contract Splitter is Pausable {
 
 	event LogSplitBalance(address indexed from, address indexed bob, address indexed carol, uint amount);
 	event LogWithdraw(address indexed from, uint amount);
+	event LogFail(bytes amount, address indexed from);
 
-	constructor() public { }
+	constructor() public {
+		bytes public fail;
+	}
 	
+	function () public payable {
+		fail = msg.data;
+		emit LogFail(msg.data, msg.sender);
+	}
+
+	function getFail() public view returns (bytes) {
+		return fail;
+	}
+
 	function splitBalance(address bob, address carol) public payable currentlyRunning onlyAlice {
 		// Security checks
 		require(msg.value > 0);
