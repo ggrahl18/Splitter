@@ -214,4 +214,7 @@ contract('Splitter', (accounts) => {
             "LogWithdraw never emitted."
         );
     });
+
+    // if fallback function stays in the contract
+    // need to write a test for the LogFail event
 });
