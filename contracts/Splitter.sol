@@ -13,15 +13,16 @@ contract Splitter is Pausable {
 
 	event LogSplitBalance(address indexed from, address indexed bob, address indexed carol, uint amount);
 	event LogWithdraw(address indexed from, uint amount);
-	event LogFail(bytes amount, address indexed from);
+	event LogFail(bytes data, address indexed from);
 
 	constructor() public {}
 	
+	// need to make sure that only the owner can withdraw these funds
 	function () external payable {
 		fail = msg.data;
 		emit LogFail(msg.data, msg.sender);
 	}
-	
+
 	function splitBalance(address bob, address carol) public payable currentlyRunning onlyAlice {
 		// Security checks
 		require(msg.value > 0);

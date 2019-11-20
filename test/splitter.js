@@ -55,10 +55,6 @@ contract('Splitter', (accounts) => {
             "There should be one event emmited."
         );
 
-
-
-
-
     it("Contact rejects odd amounts of ETH sent", async function () {
         try {
             await splitterInstance.splitBalance(bob, carol, {
