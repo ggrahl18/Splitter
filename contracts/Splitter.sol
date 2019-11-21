@@ -18,9 +18,8 @@ contract Splitter is Pausable {
 	constructor() public {}
 	
 	// need to make sure that only the owner can withdraw these funds
-	function () external payable {
-		fail = msg.data;
-		emit LogFail(msg.data, msg.sender);
+	function () external {
+		revert("Clean your act up!");
 	}
 
 	function splitBalance(address bob, address carol) public payable currentlyRunning onlyAlice {

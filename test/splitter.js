@@ -4,7 +4,7 @@ contract('Splitter', (accounts) => {
     let splitterInstance;
     let splitterAddress;
 
-    const [alice, bob, carol, notOwner] = accounts;
+    const [alice, bob, carol] = accounts;
 
     const { BN, toWei } = web3.utils;
 
@@ -27,9 +27,7 @@ contract('Splitter', (accounts) => {
         );
     });
 
-    // but it does!
-    // need to re-write this to test succesfully for a proper fallback
-    it("...has no fallbackfunction", async () => {
+    it("This contract has no fallback function", async () => {
         try {
             await web3.eth.sendTransaction({ 
                 from: alice, 
@@ -42,18 +40,6 @@ contract('Splitter', (accounts) => {
             assert.include(err.message, "revert", "");
         }
     });
-
-    it("...has no fallbackfunction", async () => {
-        const fallBackFunction = await splitterInstance.splitBalance(bob, carol, {
-            from: alice,
-            value: toWei("0.1", "ether")
-        });
-
-        assert.strictEqual(
-            txObj.receipt.logs.length,
-            1,
-            "There should be one event emmited."
-        );
 
     it("Contact rejects odd amounts of ETH sent", async function () {
         try {
@@ -214,7 +200,4 @@ contract('Splitter', (accounts) => {
             "LogWithdraw never emitted."
         );
     });
-
-    // if fallback function stays in the contract
-    // need to write a test for the LogFail event
 });
