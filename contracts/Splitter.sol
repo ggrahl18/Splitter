@@ -15,7 +15,7 @@ contract Splitter is Pausable {
 
 	constructor() public {}
 	
-	// need to make sure that only the owner can withdraw these funds
+	// Any ether sent inproperlly to the contract is reverted, sent back.
 	function () external {
 		revert("Clean your act up!");
 	}
@@ -27,13 +27,15 @@ contract Splitter is Pausable {
 		require(bob != carol);
 		require(msg.sender != bob && msg.sender != carol);
 
-        // Splits funds and allocates to bob & carol.
+        // Splits & allocates funds to bob & carol.
 		uint amountToSend = msg.value.div(2);
 		owedBalances[bob] = owedBalances[bob].add(msg.value - amountToSend);
 		owedBalances[carol] = owedBalances[carol].add(amountToSend);
 		emit LogSplitBalance(msg.sender, bob, carol, msg.value);
 	}
 
+	// Only bob and carol can each withdraw 
+	// their 50% share of the split amount.
 	function withdraw() public currentlyRunning returns(bool success) {
 		uint amount = owedBalances[msg.sender];
 	    require (owedBalances[msg.sender] > 0, "There are no available funds to withdraw");
