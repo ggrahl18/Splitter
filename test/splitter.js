@@ -17,7 +17,7 @@ contract('Splitter', (accounts) => {
         const splitterInstance = await Splitter.deployed();
     });
 
-    it('The contract has an initial balance of ether equaling zero.', async () => {
+    it('The contract has an initial balance of zero ether.', async () => {
         const balance = await web3.eth.getBalance(splitterInstance.address);
 
         assert.strictEqual(
