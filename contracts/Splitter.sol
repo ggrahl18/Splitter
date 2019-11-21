@@ -40,8 +40,8 @@ contract Splitter is Pausable {
 		uint amount = owedBalances[msg.sender];
 	    require (owedBalances[msg.sender] > 0, "There are no available funds to withdraw");
 		owedBalances[msg.sender] = 0;
-		msg.sender.transfer(amount);
 		emit LogWithdraw(msg.sender, amount);
+		msg.sender.transfer(amount);
 		return true;
 	}
 }
