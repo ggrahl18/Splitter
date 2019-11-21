@@ -13,11 +13,11 @@ contract('Splitter', (accounts) => {
         splitterAddress = splitterInstance.address;
     });
 
-    it('Test deployed contract properly', async () => {
+    it('Test deployed contract properly.', async () => {
         const splitterInstance = await Splitter.deployed();
     });
 
-    it('The contract has an initial balance of ether equaling zero', async () => {
+    it('The contract has an initial balance of ether equaling zero.', async () => {
         const balance = await web3.eth.getBalance(splitterInstance.address);
 
         assert.strictEqual(
@@ -27,7 +27,7 @@ contract('Splitter', (accounts) => {
         );
     });
 
-    it("This contract has no fallback function", async () => {
+    it("This contract has no fallback function.", async () => {
         try {
             await web3.eth.sendTransaction({ 
                 from: alice, 
@@ -41,33 +41,33 @@ contract('Splitter', (accounts) => {
         }
     });
 
-    it("Contact rejects odd amounts of ETH sent", async function () {
+    it("Contact rejects odd amounts of ether sent.", async function () {
         try {
             await splitterInstance.splitBalance(bob, carol, {
                 from: alice,
                 value: 3
             });
 
-            assert.fail("3 ETH is unacceptable!");
+            assert.fail("3 ether is unacceptable!");
         } catch (err) {
             assert.include(err.message, "revert", "")
         };
     });
 
-    it("Contract should reject 0 ETH from alice", async () => {
+    it("Contract should reject 0 ether from alice.", async () => {
         try {
             await splitterInstance.splitBalance(bob, carol, {
                 from: alice,
                 value: 0
             });
 
-            assert.fail("0 ETH is unacceptable!");
+            assert.fail("0 ether is unacceptable!");
             } catch (err) {
                 assert.include(err.message, "revert", "")
             };
     });
 
-    it("Contract emits the LogSplitBalance event", async () => {
+    it("Contract emits the LogSplitBalance event.", async () => {
         const txObj = await splitterInstance.splitBalance(bob, carol, {
             from: alice,
             value: toWei("0.1", "ether")
@@ -94,19 +94,19 @@ contract('Splitter', (accounts) => {
         assert.strictEqual(
             txObj.receipt.logs[0].args[1],
             bob,
-            "LogWithdraw emitted with wrong bob address"
+            "LogWithdraw emitted with wrong bob address."
         );
 
         assert.strictEqual(
             txObj.receipt.logs[0].args[2],
             carol,
-            "LogWithdraw emitted with wrong carol address"
+            "LogWithdraw emitted with wrong carol address."
         );
 
         assert.strictEqual(
             txObj.receipt.logs[0].args[3].toString(),
             toWei("0.1", "ether"),
-            "LogWithdraw emitted with incorrect amount"
+            "LogWithdraw emitted with incorrect amount".
         );
         
         assert.strictEqual(
@@ -116,7 +116,7 @@ contract('Splitter', (accounts) => {
         );
     });
 
-    it("Splitter allows receiver to withdraw 0.05 ETH (gas considered)", async () => {
+    it("Splitter allows receiver to withdraw 0.05 ether (gas considered).", async () => {
         const startBalance = new BN(await web3.eth.getBalance(bob));
 
         await splitterInstance.splitBalance(bob, carol, {
@@ -143,11 +143,11 @@ contract('Splitter', (accounts) => {
                 .add(new BN(toWei("0.05", "ether")))
                 .sub(allowedGas)
                 .toString(10),
-            "bob did not get enough ETH from the 0.05 ETH"
+            "bob did not get enough ether from the 0.05 ETH"
         );
     });
 
-    it("Test allows bob to withdraw 0.05 ETH and then checks that 0 is left", async () => {
+    it("Test allows bob to withdraw 0.05 ether and then checks that 0 is left.", async () => {
         const startBalance = await splitterInstance.owedBalances(bob);
 
         await splitterInstance.splitBalance(bob, carol, {

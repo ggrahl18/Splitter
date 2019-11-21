@@ -7,7 +7,6 @@ contract Splitter is Pausable {
 	using SafeMath for uint;
 
 	address public _alice = msg.sender;
-	bytes public fail;
 
 	mapping (address => uint) public owedBalances;
 
