@@ -13,7 +13,6 @@ contract Splitter is Pausable {
 
 	event LogSplitBalance(address indexed from, address indexed bob, address indexed carol, uint amount);
 	event LogWithdraw(address indexed from, uint amount);
-	event LogFail(bytes data, address indexed from);
 
 	constructor() public {}
 	
