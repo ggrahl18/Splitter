@@ -13,10 +13,6 @@ contract('Splitter', (accounts) => {
         splitterAddress = splitterInstance.address;
     });
 
-    it('Test deployed contract properly.', async () => {
-        const splitterInstance = await Splitter.deployed();
-    });
-
     it('The contract has an initial balance of zero ether.', async () => {
         const balance = await web3.eth.getBalance(splitterInstance.address);
 
@@ -92,13 +88,13 @@ contract('Splitter', (accounts) => {
         );
 
         assert.strictEqual(
-            txObj.receipt.logs[0].args[1],
+            txObj.receipt.logs[0].args.bob,
             bob,
             "LogWithdraw emitted with wrong bob address."
         );
 
         assert.strictEqual(
-            txObj.receipt.logs[0].args[2],
+            txObj.receipt.logs[0].args.carol,
             carol,
             "LogWithdraw emitted with wrong carol address."
         );
