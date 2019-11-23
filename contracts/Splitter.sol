@@ -6,8 +6,6 @@ import "./Pausable.sol";
 contract Splitter is Pausable {
 	using SafeMath for uint;
 
-	address public _alice = msg.sender;
-
 	mapping (address => uint) public owedBalances;
 
 	event LogSplitBalance(address indexed from, address indexed bob, address indexed carol, uint amount);

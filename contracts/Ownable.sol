@@ -4,9 +4,9 @@ contract Ownable {
 
     address private _alice;
 
-    event LogNewOwner(address originalAlice, address newAlice);
+    event LogNewOwner(address indexed sender, address indexed originalAlice, address indexed newAlice);
 
-    constructor() internal {
+    constructor() public {
         _alice = msg.sender;
     }
 
@@ -19,12 +19,13 @@ contract Ownable {
     }
 
     function changeAlice(address _newAlice) public onlyAlice returns(bool success) {
-		emit LogNewOwner(_alice, _newAlice);
+		require(_newAlice != address(0), "The new Alice cannot be the same as the original Alice.");
+        emit LogNewOwner(msg.sender, _alice, _newAlice);
 		_alice = _newAlice;
         return true;
 	}
 
-    function isAlice() public view returns (bool) {
-        return _alice == msg.sender;
+    function isAlice() public view returns (address) {
+        return _alice;
     }
 }

@@ -102,12 +102,6 @@ contract('Splitter', (accounts) => {
             carol,
             "LogWithdraw emitted with wrong carol address."
         );
-
-        assert.strictEqual(
-            txObj.receipt.logs[0].args[3].toString(),
-            toWei("0.1", "ether"),
-            "LogWithdraw emitted with incorrect amount".
-        );
         
         assert.strictEqual(
             txObj.receipt.logs[0].event,

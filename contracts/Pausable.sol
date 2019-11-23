@@ -7,7 +7,11 @@ contract Pausable is Ownable {
     event LogPaused(address indexed sender);
     event LogResumed(address indexed sender);
 
-    bool private _isPaused;
+    bool public _isPaused;
+
+    constructor() public {
+        _isPaused = false;
+    }
 
     modifier currentlyRunning() {
         require(!_isPaused, "The contract is currently paused");
@@ -19,10 +23,6 @@ contract Pausable is Ownable {
         _;
     }
 
-    function paused() public view returns(bool _paused) {
-        return _isPaused;
-    }
-
     function pause() public onlyAlice currentlyRunning {
         _isPaused = true;
         emit LogPaused(msg.sender);
@@ -32,6 +32,4 @@ contract Pausable is Ownable {
         _isPaused = false;
         emit LogResumed(msg.sender);
     }
-
-
 }
