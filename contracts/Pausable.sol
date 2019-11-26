@@ -7,7 +7,7 @@ contract Pausable is Ownable {
     event LogPaused(address indexed sender);
     event LogResumed(address indexed sender);
 
-    bool public _isPaused;
+    bool private _isPaused;
 
     constructor() public {
         _isPaused = false;
