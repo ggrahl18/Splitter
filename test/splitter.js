@@ -34,19 +34,6 @@ contract('Splitter', (accounts) => {
         );
     });
 
-    it("Contact rejects odd amounts of ether sent.", async function () {
-        try {
-            await splitterInstance.splitBalance(bob, carol, {
-                from: alice,
-                value: 3
-            });
-
-            assert.fail("3 ether is unacceptable!");
-        } catch (err) {
-            assert.include(err.message, "revert", "")
-        };
-    });
-
     it("Contract should reject 0 ether from alice.", async () => {
         try {
             await splitterInstance.splitBalance(bob, carol, {
