@@ -19,17 +19,32 @@ contract Splitter is Pausable {
 	}
 
 	function splitBalance(address bob, address carol) public payable currentlyRunning onlyAlice {
+	    address alice = msg.sender;
+	    
 		// Security checks
 		require(msg.value > 0);
-		require(msg.value % 2 == 0, "Must send an amount divisible by two.");
 		require(bob != carol);
 		require(msg.sender != bob && msg.sender != carol);
 
-        // Splits & allocates funds to bob & carol.
-		uint amountToSend = msg.value.div(2);
-		owedBalances[bob] = owedBalances[bob].add(msg.value - amountToSend);
-		owedBalances[carol] = owedBalances[carol].add(amountToSend);
-		emit LogSplitBalance(msg.sender, bob, carol, msg.value);
+        // Remainder
+        if (msg.value % 2 != 0) {
+            uint remainder = 1;
+            // Splits funds.
+            uint amountToSend = (msg.value - 1) / 2;
+            require((amountToSend % 2 == 0), "Uneven amount trying to be split."); // Will remove once checked
+            // Allocates funds to bob & carol.
+		    owedBalances[bob] = owedBalances[bob].add(msg.value - amountToSend);
+		    owedBalances[carol] = owedBalances[carol].add(amountToSend);
+		    owedBalances[alice] = owedBalances[alice].add(remainder);
+		    emit LogSplitBalance(msg.sender, bob, carol, msg.value);
+        } else {
+            // Splits funds.
+            uint amountToSend = msg.value.div(2);
+            // Allocates funds to bob & carol.
+		    owedBalances[bob] = owedBalances[bob].add(msg.value - amountToSend);
+		    owedBalances[carol] = owedBalances[carol].add(amountToSend);
+		    emit LogSplitBalance(msg.sender, bob, carol, msg.value);
+        }
 	}
 
 	// Only bob and carol can each withdraw 
