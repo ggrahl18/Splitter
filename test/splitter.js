@@ -1,4 +1,5 @@
 const Splitter = artifacts.require("./Splitter.sol");
+const assertRevert = require('./assertRevert').assertRevert;
 
 contract('Splitter', (accounts) => {
     let splitterInstance;
@@ -23,18 +24,14 @@ contract('Splitter', (accounts) => {
         );
     });
 
-    it("This contract has no fallback function.", async () => {
-        try {
-            await web3.eth.sendTransaction({ 
-                from: alice, 
-                to: splitterAddress, 
-                value: toWei("0.1", "ether")
-            });
+    it("Fallback tirggered, should reject sending ether directly to the contract.", async () => {
+        instance = await Splitter.deployed();
 
-            assert.fail("Allowed fallback call");
-        } catch (err) {
-            assert.include(err.message, "revert", "");
-        }
+        await assertRevert(
+            instance.sendTransaction(
+                { from: alice, to: splitterAddress, value: 1 }
+            )
+        );
     });
 
     it("Contact rejects odd amounts of ether sent.", async function () {
