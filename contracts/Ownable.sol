@@ -25,7 +25,7 @@ contract Ownable {
         return true;
 	}
 
-    function isAlice() public view returns (address) {
+    function getAlice() public view returns (address) {
         return _alice;
     }
 }
