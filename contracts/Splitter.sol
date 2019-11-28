@@ -13,7 +13,7 @@ contract Splitter is Pausable {
 
 	constructor() public {}
 
-	// Any ether sent inproperlly to the contract is reverted, sent back.
+	// Any ether sent inproperly to the contract is reverted, sent back.
 	function () external {
 		revert("Clean your act up!");
 	}
