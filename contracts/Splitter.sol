@@ -12,26 +12,23 @@ contract Splitter is Pausable {
 	event LogWithdraw(address indexed from, uint amount);
 
 	constructor() public {}
-	
+
 	// Any ether sent inproperlly to the contract is reverted, sent back.
 	function () external {
 		revert("Clean your act up!");
 	}
 
 	function splitBalance(address bob, address carol) public payable currentlyRunning onlyAlice {
-	    address alice = msg.sender;
-	    
 		// Security checks
-		require(msg.value > 0);
-		require(bob != carol);
-		require(msg.sender != bob && msg.sender != carol);
+		require(msg.value > 0, "Amount sent must be larger than zero eth.");
+		require(bob != carol, "bob cannot be carol");
+		require(alice != bob && alice != carol, "alice cannot be bob and alice cannot be carol");
 
         // Remainder
         if (msg.value % 2 != 0) {
-            uint remainder = 1;
+            uint remainder = msg.value % 2;
             // Splits funds.
-            uint amountToSend = (msg.value - 1) / 2;
-            require((amountToSend % 2 == 0), "Uneven amount trying to be split."); // Will remove once checked
+            uint amountToSend = (msg.value - remainder) / 2;
             // Allocates funds to bob & carol.
 		    owedBalances[bob] = owedBalances[bob].add(msg.value - amountToSend);
 		    owedBalances[carol] = owedBalances[carol].add(amountToSend);
@@ -47,7 +44,7 @@ contract Splitter is Pausable {
         }
 	}
 
-	// Only bob and carol can each withdraw 
+	// Only bob and carol can each withdraw
 	// their 50% share of the split amount.
 	function withdraw() public currentlyRunning returns(bool success) {
 		uint amount = owedBalances[msg.sender];
