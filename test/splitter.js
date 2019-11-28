@@ -107,7 +107,7 @@ contract('Splitter', (accounts) => {
         const gasPrice = new BN(tx.gasPrice);
 
         const gasUsed = new BN(txObj.receipt.gasUsed);
-        const allowedGas = gasPrice.mul(gasUsed);
+        const txCost = gasPrice.mul(gasUsed);
 
         const endBalance = new BN(await web3.eth.getBalance(bob));
 
@@ -115,7 +115,7 @@ contract('Splitter', (accounts) => {
             endBalance.toString(10),
             startBalance
                 .add(new BN(toWei("0.05", "ether")))
-                .sub(allowedGas)
+                .sub(txCost)
                 .toString(10),
             "bob did not get enough ether from the 0.05 ETH"
         );
