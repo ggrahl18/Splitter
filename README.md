@@ -1,12 +1,13 @@
 # Splitter
 Splitter project for B9lab.
 
-The OpenZeppelin SafeMath contract is used in this project.
+Contract Splitter is used to split funds from alice in two equal parts and then distribute them to bob and carol. If amount sent to be split is not devisible by 2, then the remainder will be refunded back to alices address.
 
-Contract Splitter is used to split funds from alice and then distribute them equally to bob and carol. An amount sent to function splitBalance must be divisible by 2.
+A push, pull method has been used for security purposes in regards to calling the split function and then withdrawing the funds to bob and carol.
 
-A push, pull method has been used for security purposes in regards to calling the splitBalance function and then withdrawing the funds to bob and carol.
+Unit tests are included and a work in progress.
 
-Unit tests will follow in the next couple of days.
 Splitter.sol has been tested in Remix succesfully.
+
+The OpenZeppelin SafeMath contract is used in this project.
 
