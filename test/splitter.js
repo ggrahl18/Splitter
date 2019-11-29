@@ -36,7 +36,7 @@ contract('Splitter', (accounts) => {
 
     it("Contract should reject 0 ether from alice.", async () => {
         try {
-            await splitterInstance.splitBalance(bob, carol, {
+            await splitterInstance.split(bob, carol, {
                 from: alice,
                 value: 0
             });
@@ -48,7 +48,7 @@ contract('Splitter', (accounts) => {
     });
 
     it("Contract emits the LogSplitBalance event.", async () => {
-        const txObj = await splitterInstance.splitBalance(bob, carol, {
+        const txObj = await splitterInstance.split(bob, carol, {
             from: alice,
             value: toWei("0.1", "ether")
         });
@@ -93,7 +93,7 @@ contract('Splitter', (accounts) => {
     it("Splitter allows receiver to withdraw 0.05 ether (gas considered).", async () => {
         const startBalance = new BN(await web3.eth.getBalance(bob));
 
-        await splitterInstance.splitBalance(bob, carol, {
+        await splitterInstance.split(bob, carol, {
             from: alice,
             value: toWei("0.1", "ether")
         });
@@ -124,7 +124,7 @@ contract('Splitter', (accounts) => {
     it("Test allows bob to withdraw 0.05 ether and then checks that 0 is left.", async () => {
         const startBalance = await splitterInstance.owedBalances(bob);
 
-        await splitterInstance.splitBalance(bob, carol, {
+        await splitterInstance.split(bob, carol, {
             from: alice,
             value: toWei("0.1", "ether")
         });
@@ -141,7 +141,7 @@ contract('Splitter', (accounts) => {
     });
 
     it("Testing the LogWithdraw event", async () => {
-        await splitterInstance.splitBalance(bob, carol, {
+        await splitterInstance.split(bob, carol, {
             from: alice,
             value: toWei("0.1", "ether")
         });
