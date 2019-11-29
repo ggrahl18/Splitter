@@ -18,40 +18,34 @@ contract Splitter is Pausable {
 		revert("Clean your act up!");
 	}
 
-	function splitBalance(address bob, address carol) public payable currentlyRunning onlyAlice {
-		// Security checks
+	function split(address bob, address carol) public payable currentlyRunning onlyAlice {
 		require(msg.value > 0, "Amount sent must be larger than zero eth.");
 		require(bob != carol, "bob cannot be carol");
-		require(alice != bob && alice != carol, "alice cannot be bob and alice cannot be carol");
 
-        // Remainder
+        uint balance = msg.value;
+
+	    // Remainder
         if (msg.value % 2 != 0) {
-            uint remainder = msg.value % 2;
-            // Splits funds.
-            uint amountToSend = (msg.value - remainder) / 2;
-            // Allocates funds to bob & carol.
-		    owedBalances[bob] = owedBalances[bob].add(msg.value - amountToSend);
-		    owedBalances[carol] = owedBalances[carol].add(amountToSend);
-		    owedBalances[alice] = owedBalances[alice].add(remainder);
-		    emit LogSplitBalance(msg.sender, bob, carol, msg.value);
-        } else {
-            // Splits funds.
-            uint amountToSend = msg.value.div(2);
-            // Allocates funds to bob & carol.
-		    owedBalances[bob] = owedBalances[bob].add(msg.value - amountToSend);
-		    owedBalances[carol] = owedBalances[carol].add(amountToSend);
-		    emit LogSplitBalance(msg.sender, bob, carol, msg.value);
+            balance.sub(1);
+            owedBalances[msg.sender] = owedBalances[msg.sender].add(1);
         }
+
+        // Split funds
+        uint splitBalance = balance.div(2);
+        // Allocates funds to bob & carol.
+	    owedBalances[bob] = owedBalances[bob].add(splitBalance);
+	    owedBalances[carol] = owedBalances[carol].add(splitBalance);
+	    emit LogSplitBalance(msg.sender, bob, carol, msg.value);
 	}
 
 	// Only bob and carol can each withdraw
 	// their 50% share of the split amount.
 	function withdraw() public currentlyRunning returns(bool success) {
-		uint amount = owedBalances[msg.sender];
-	    require (owedBalances[msg.sender] > 0, "There are no available funds to withdraw");
+		uint splitBalance = owedBalances[msg.sender];
+	    require (owedBalances[msg.sender] > 0, "Insufficient funds to withdraw!");
 		owedBalances[msg.sender] = 0;
-		emit LogWithdraw(msg.sender, amount);
-		msg.sender.transfer(amount);
+		emit LogWithdraw(msg.sender, splitBalance);
+		msg.sender.transfer(splitBalance);
 		return true;
 	}
 }
