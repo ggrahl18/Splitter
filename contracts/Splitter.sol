@@ -25,8 +25,8 @@ contract Splitter is Pausable {
 		uint balance = msg.value;
 
 		// Remainder
-		if (msg.value % 2 != 0) {
-			balance.sub(1);
+		if (balance % 2 != 0) {
+			balance = balance.sub(1);
 			owedBalances[msg.sender] = owedBalances[msg.sender].add(1);
 		}
 
@@ -38,11 +38,9 @@ contract Splitter is Pausable {
 		emit LogSplitBalance(msg.sender, bob, carol, msg.value);
 	}
 
-	// Only bob and carol can each withdraw
-	// their 50% share of the split amount.
+	// Only bob and carol can each withdraw their share of the split amount.
 	function withdraw() public currentlyRunning returns(bool success) {
 		uint splitBalance = owedBalances[msg.sender];
-		require (owedBalances[msg.sender] > 0, "Insufficient funds to withdraw!");
 		owedBalances[msg.sender] = 0;
 		emit LogWithdraw(msg.sender, splitBalance);
 		msg.sender.transfer(splitBalance);
