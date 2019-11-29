@@ -22,27 +22,27 @@ contract Splitter is Pausable {
 		require(msg.value > 0, "Amount sent must be larger than zero eth.");
 		require(bob != carol, "bob cannot be carol");
 
-        uint balance = msg.value;
+		uint balance = msg.value;
 
-	    // Remainder
-        if (msg.value % 2 != 0) {
-            balance.sub(1);
-            owedBalances[msg.sender] = owedBalances[msg.sender].add(1);
-        }
+		// Remainder
+		if (msg.value % 2 != 0) {
+			balance.sub(1);
+			owedBalances[msg.sender] = owedBalances[msg.sender].add(1);
+		}
 
-        // Split funds
-        uint splitBalance = balance.div(2);
-        // Allocates funds to bob & carol.
-	    owedBalances[bob] = owedBalances[bob].add(splitBalance);
-	    owedBalances[carol] = owedBalances[carol].add(splitBalance);
-	    emit LogSplitBalance(msg.sender, bob, carol, msg.value);
+		// Split funds
+		uint splitBalance = balance.div(2);
+		// Allocates funds to bob & carol.
+		owedBalances[bob] = owedBalances[bob].add(splitBalance);
+		owedBalances[carol] = owedBalances[carol].add(splitBalance);
+		emit LogSplitBalance(msg.sender, bob, carol, msg.value);
 	}
 
 	// Only bob and carol can each withdraw
 	// their 50% share of the split amount.
 	function withdraw() public currentlyRunning returns(bool success) {
 		uint splitBalance = owedBalances[msg.sender];
-	    require (owedBalances[msg.sender] > 0, "Insufficient funds to withdraw!");
+		require (owedBalances[msg.sender] > 0, "Insufficient funds to withdraw!");
 		owedBalances[msg.sender] = 0;
 		emit LogWithdraw(msg.sender, splitBalance);
 		msg.sender.transfer(splitBalance);
