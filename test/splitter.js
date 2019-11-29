@@ -25,10 +25,8 @@ contract('Splitter', (accounts) => {
     });
 
     it("Fallback tirggered, should reject sending ether directly to the contract.", async () => {
-        instance = await Splitter.deployed();
-
         await assertRevert(
-            instance.sendTransaction(
+            splitterInstance.sendTransaction(
                 { from: alice, to: splitterAddress, value: 1 }
             )
         );
