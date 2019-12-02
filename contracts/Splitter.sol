@@ -18,7 +18,7 @@ contract Splitter is Pausable {
 		revert("Clean your act up!");
 	}
 
-	function split(address bob, address carol) public payable currentlyRunning onlyAlice {
+	function split(address bob, address carol) public payable currentlyRunning {
 		require(msg.value > 0, "Amount sent must be larger than zero eth.");
 		require(bob != carol, "bob cannot be carol");
 
