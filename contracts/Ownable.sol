@@ -19,9 +19,9 @@ contract Ownable {
     }
 
     function changeAlice(address payable _newAlice) public onlyAlice returns(bool success) {
-		require(_newAlice != address(0), "The new Alice cannot be the same as the original Alice.");
+        require(_newAlice != address(0), "The new Alice cannot be the same as the original Alice.");
         emit LogNewOwner(msg.sender, alice, _newAlice);
-		alice = _newAlice;
+        alice = _newAlice;
         return true;
 	}
 
