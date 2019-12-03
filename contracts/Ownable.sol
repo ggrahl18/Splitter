@@ -2,7 +2,7 @@ pragma solidity ^0.5.12;
 
 contract Ownable {
 
-    address payable public alice;
+    address private alice;
 
     event LogNewOwner(address indexed sender, address indexed originalAlice, address indexed newAlice);
 
