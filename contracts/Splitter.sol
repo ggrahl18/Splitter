@@ -20,17 +20,15 @@ contract Splitter is Pausable {
 
 	function split(address bob, address carol) public payable currentlyRunning {
 		// Security checks
-		require(msg.value > 0, "Amount sent must be larger than zero eth.");
-		require(bob != carol, "bob cannot be carol");
+		require(msg.value > 0 && bob != carol, "split rejected, please try again");
 
-		uint balance = msg.value;
 		// IF theirs a remainder, refund it back to the sender
 		if (balance % 2 != 0) {
 			owedBalances[msg.sender] = owedBalances[msg.sender].add(1);
 		}
 
 		// Split funds
-		balance = balance.div(2);
+		uint balance = msg.value.div(2);
 		// Allocates funds to bob & carol.
 		owedBalances[bob] = owedBalances[bob].add(balance);
 		owedBalances[carol] = owedBalances[carol].add(balance);
