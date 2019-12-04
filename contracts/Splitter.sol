@@ -23,12 +23,18 @@ contract Splitter is Pausable {
 		require(msg.value > 0, "Amount sent must be larger than zero eth.");
 		require(bob != carol, "bob cannot be carol");
 
-        // Divides balance by two.
-        uint splitBalance = msg.value.div(2);
-        // Allocates splitBlanace to bob & carol.
-	    owedBalances[bob] = owedBalances[bob].add(splitBalance);
-	    owedBalances[carol] = owedBalances[carol].add(splitBalance);
-	    emit LogSplitBalance(msg.sender, bob, carol, msg.value);
+		uint balance = msg.value;
+		// IF theirs a remainder, refund it back to the sender
+		if (balance % 2 != 0) {
+			owedBalances[msg.sender] = owedBalances[msg.sender].add(1);
+		}
+
+		// Split funds
+		balance = balance.div(2);
+		// Allocates funds to bob & carol.
+		owedBalances[bob] = owedBalances[bob].add(balance);
+		owedBalances[carol] = owedBalances[carol].add(balance);
+		emit LogSplitBalance(msg.sender, bob, carol, msg.value);
 	}
 
 	// Only bob and carol can each withdraw their share of the split amount.
