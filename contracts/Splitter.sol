@@ -22,13 +22,14 @@ contract Splitter is Pausable {
 		// Security checks
 		require(msg.value > 0 && bob != carol, "split rejected, please try again");
 
+		uint balance = msg.value;
 		// IF theirs a remainder, refund it back to the sender
-		if (balance % 2 != 0) {
+		if (msg.value % 2 != 0) {
 			owedBalances[msg.sender] = owedBalances[msg.sender].add(1);
 		}
 
 		// Split funds
-		uint balance = msg.value.div(2);
+		balance = msg.value.div(2);
 		// Allocates funds to bob & carol.
 		owedBalances[bob] = owedBalances[bob].add(balance);
 		owedBalances[carol] = owedBalances[carol].add(balance);
