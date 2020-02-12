@@ -1,0 +1,65 @@
+h1 {
+  font-family: monospace;
+}
+
+input {
+  width: 100%;
+  padding: 6px;
+  margin: 6px 0 2;
+  box-sizing: border-box
+}
+
+.App {
+  text-align: center;
+  font-family: monospace;
+  font-size: 140%;
+  color: white;
+  /* font-family: 'Work Sans', sans-serif; */
+}
+
+.btn {
+  margin-bottom: 14px;
+  font-size: 22px;
+  text-align: center;
+  padding: 4px;
+}
+
+.buttons-container {
+  width: 41.5%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  font-size: 140%;
+}
+
+.form-contents {
+  font-weight: bold;
+  display: inline-grid;
+  width: 40%;
+  padding: 2%;
+  margin: 0 auto;
+  margin-bottom: auto;
+  font-size: 24px;
+}
+
+.form-control {
+  margin-bottom: 8px;
+  font-size: 22px;
+  text-align: center;
+}
+
+.split-form {
+  border: white solid 2px;
+  font-size: 20px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  padding: 12px;
+  width: 40%;
+}
+
+.Wait {
+  color: white;
+  font-size: xx-large;
+  text-align: center;
+}
