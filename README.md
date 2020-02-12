@@ -1,4 +1,4 @@
- ![Splitter GUI](/img/Screenshot_20200210_110200 1.jpg)
+ ![Splitter GUI](/img/Screenshot_20200210_110200 1 (1).png)
 
 
 # Splitter
