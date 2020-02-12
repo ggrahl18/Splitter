@@ -11,3 +11,10 @@ Splitter.sol has been tested in Remix succesfully.
 
 The OpenZeppelin SafeMath contract is used in this project.
 
+#Instructions
+cd Splitter
+npm install @openzeppelin/contracts
+cd client
+npm install
+npm start
+
