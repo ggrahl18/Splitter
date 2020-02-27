@@ -15,7 +15,9 @@ class App extends Component {
       contract: null,
       amount: 0,
       bob: null,
+      bobBal: 0,
       carol: null,
+      carolBal: 0,
       contractBal: 0, 
       withdrawAmount: 0
     }
@@ -56,7 +58,7 @@ handleContractBalance = async () => {
   let { web3, address } = this.state;
   let balance = await web3.eth.getBalance(address);
   let contractBalance = web3.utils.fromWei(balance, 'ether');
-  this.setState({ contractBal: contractBalance});
+  this.setState({ contractBal: contractBalance });
 }
 
 handleInput = (event) => {
@@ -78,13 +80,18 @@ handleSplit = async () => {
 
 handleWithdraw = async () => {
   let { accounts, contract } = this.state;
-  // let { accounts, contract, web3, withdrawAmount } = this.state;
-  // let amount = web3.utils.toWei(withdrawAmount, 'ether');
-  // console.log(amount)
   await contract.methods.withdraw().send({
     from: accounts[0]
   }).then(console.log);
-  // });
+}
+
+handleRecipientBalance = async () => {
+  let { web3, bob, carol } = this.state;
+  let bobBalance = await web3.eth.getBalance(bob);
+  bobBalance = web3.utils.fromWei(bobBalance, 'ether');
+  let carolBalance = await web3.eth.getBalance(carol);
+  carolBalance = web3.utils.fromWei(carolBalance, 'ether');
+  this.setState({ bobBal: bobBalance, carolBal: carolBalance });
 }
 
 render() {
@@ -94,9 +101,10 @@ render() {
     return (
       <div className="App">
         <h1>SPLITTER</h1>
-        <h2>Contract Balance: <span className="badge badge-secondary">{this.state.contractBal}</span> ETH </h2>
         <form className="split-form">
-        <h2>Split Form</h2>
+        <h3>Contract Balance: <span className="badge badge-secondary">{this.state.contractBal}</span> ETH </h3>
+        <h3>Bob's Balance: <span className="badge badge-secondary">{this.state.bobBal}</span> ETH </h3>
+        <h3>Carol's Balance: <span className="badge badge-secondary">{this.state.carolBal}</span> ETH </h3>
         <hr></hr>
         <div className="form-contents">
           <label htmlFor="bob">Recipient 1: </label>
