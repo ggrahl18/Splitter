@@ -1,6 +1,3 @@
- ![Splitter GUI](/img/Screenshot_20200210_110200 1 (1).png)
-
-
 # Splitter
 Splitter project for B9lab.
 
@@ -8,11 +5,14 @@ Contract Splitter is used to split funds from alice in two equal parts and then 
 
 A push, pull method has been used for security purposes in regards to calling the split function and then withdrawing the funds to bob and carol.
 
-Unit tests are included and a work in progress.
-
 Splitter.sol has been tested in Remix succesfully.
 
+Unit tests are included.
+
 The OpenZeppelin SafeMath contract is used in this project.
+
+The front end GUI is built with React and Bootstrap
+
 
 ## Instructions
 
