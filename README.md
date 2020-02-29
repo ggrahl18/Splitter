@@ -20,9 +20,9 @@ The front end GUI is built with React and Bootstrap
 
 > $ npm install @openzeppelin/contracts
 
-> $ cd client
+> $ cd client/src
 
-> $ npm install
+> $ npm install bootstrap
 
 > $ npm start
 
