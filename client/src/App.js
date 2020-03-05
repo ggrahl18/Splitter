@@ -17,8 +17,12 @@ class App extends Component {
       accounts: null,
       contract: null,
       amount: 0,
+      alice: null,
       bob: null,
       carol: null,
+      aliceBal: 0,
+      bobBal: 0,
+      carolBal: 0,
       contractBal: 0, 
       withdrawAmount: 0
     }
@@ -31,7 +35,7 @@ class App extends Component {
 
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
-
+      
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
       const deployedNetwork = Splitter.networks[networkId];
@@ -43,8 +47,11 @@ class App extends Component {
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance, address: deployedNetwork.address }, () => {
-        this.handleContractBalance()
+        this.handleContractBalance();
+        this.handleRecipientBalance();
       });
+
+    
      
     } catch (error) {
       // Catch any errors for any of the above operations.
@@ -60,6 +67,18 @@ handleContractBalance = async () => {
   let balance = await web3.eth.getBalance(address);
   let contractBalance = web3.utils.fromWei(balance, 'ether');
   this.setState({ contractBal: contractBalance });
+}
+
+handleRecipientBalance = async () => {
+  let { accounts, web3 } = this.state;
+  // let bobBalance = await web3.eth.getBalance(bob);
+  // bobBalance = web3.utils.fromWei(bobBalance, 'ether');
+  // let carolBalance = await web3.eth.getBalance(carol);
+  // carolBalance = web3.utils.fromWei(carolBalance, 'ether');
+  let aliceAccount = await web3.eth.getBalance(accounts[0]);
+  let aliceBalance = web3.utils.fromWei(aliceAccount, 'ether');
+  this.setState({ aliceBal: aliceBalance });
+  return console.log(accounts);
 }
 
 handleInput = (event) => {
@@ -88,7 +107,7 @@ handleWithdraw = async () => {
 
 render() {
   if (!this.state.web3) {
-    return <div className="Wait">Wait for it... Wait for it... WAIT!</div>;
+    return <div className="Wait">Wait... Now don't get hastey!</div>;
   }
     return (
       <Container className="text-center">
@@ -97,32 +116,44 @@ render() {
           <Card>
             <Card.Header className="text-center">
               <h3>Contract Balance: <span className="badge badge-secondary">{this.state.contractBal}</span> ETH </h3>
+              <h3>Alices Balance: <span className="badge badge-secondary">{this.state.aliceBal}</span> ETH </h3>
+              <h3>Bobs Balance: <span className="badge badge-secondary">{this.state.bobBal}</span> ETH </h3>
+              <h3>Carols Balance: <span className="badge badge-secondary">{this.state.carolBal}</span> ETH </h3>
             </Card.Header>
-
+              <br />
               <Card.Title className="text-center"><label htmlFor="bob">Recipient 1: </label></Card.Title>
               <input
                 autoComplete="off"
                 name="bob"
-                className="form-control"
+                className="form-control text-center"
                 id="bob"
                 onChange={this.handleInput}
+                style={{width: "95%", margin: "auto"}}
+                placeholder="Example Ethereum Address: 0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
               />
+              <br />
               <Card.Title className="text-center"><label htmlFor="carol">Recipient 2: </label></Card.Title>
               <input
                 autoComplete="off"
                 name="carol"
-                className="form-control"
+                className="form-control text-center"
                 id="carol"
                 onChange={this.handleInput}
+                style={{width: "95%", margin: "auto"}}
+                placeholder="Example Ethereum Address: 0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
               />
+              <br />
               <Card.Title className="text-center"><label htmlFor="amount">Split Amount (Ξ): </label></Card.Title>
               <input
-                autoComplete="off"
-                name="amount"
-                className="form-control"
+                className="form-control text-center"
                 id="amount"
                 onChange={this.handleInput}
+                style={{width: "95%", margin: "auto"}}
+                autoComplete="off"
+                name="amount"
+                placeholder="Example Ethereum Address: 0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
               />
+              <br />
           </Card>
         </Container>
         <Container>
