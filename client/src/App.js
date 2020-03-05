@@ -2,12 +2,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { Component } from "react";
 import Splitter from "./contracts/Splitter.json";
 import getWeb3 from "./getWeb3";
-
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import ButtonToolbar from "react-bootstrap/ButtonToolbar";
 import Card from 'react-bootstrap/Card';
-// import "./App.css";
 
 class App extends Component {
   
