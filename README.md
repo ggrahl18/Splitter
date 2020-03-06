@@ -1,4 +1,4 @@
-# Splitter
+# Splitter DApp
 Splitter project for B9lab.
 
 Contract Splitter is used to split funds from alice in two equal parts and then distribute them to bob and carol. If amount sent to be split is not devisible by 2, then the remainder will be refunded back to alices address.
