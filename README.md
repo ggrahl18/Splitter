@@ -13,6 +13,8 @@ The OpenZeppelin SafeMath contract is used in this project.
 
 The front end GUI is built with React and Bootstrap
 
+![Splitter DApp](./finalSplitterDApp.png) 
+
 
 ## Instructions
 
