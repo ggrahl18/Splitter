@@ -144,7 +144,7 @@
                   style={{width: "95%", margin: "auto"}}
                   autoComplete="off"
                   name="amount"
-                  placeholder="Example Ethereum Address: 0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
+                  placeholder="Amount to split in ETH"
                 />
                 <br />
             </Card>
