@@ -75,30 +75,55 @@
     this.setState({ userBal: userBalance });
   }
 
+  // Need to figure out multiple event handlers on 1 onClick
+  handleUpdateBalance = async () => {
+    this.handleRecipientBalance();
+    this.handleContractBalance();
+  }
+
   handleInput = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   };
 
+  // Need to update contract and account balance
   handleSplit = async () => {
     let { accounts, contract, bob, carol, amount, web3 } = this.state;
     const ethAmount = web3.utils.toWei(amount);
     try {
-      await contract.methods.split(bob, carol).send({
+      const splitSuccess = await contract.methods.split(
+        bob, 
+        carol
+      ).call({
         from: accounts[0],
-        value: ethAmount,
+        value: ethAmount
       })
+
+      if (splitSuccess) {
+        await contract.methods.split(
+          bob,
+          carol
+        ).send({
+          from: accounts[0],
+          value: ethAmount
+        })
+        // I don't think these are working .on()
+        .on('transactionHash', txHash => this.setState({ txHash: txHash }))
+        .on('receipt', receipt => this.setState({ txReceipt: receipt}))
+      }
     } catch(err) {
+      alert('Split failed!')
       console.log(err)
     }
   }
 
+  // Need to update contract and account balance
   handleWithdraw = async () => {
     let { accounts, contract } = this.state;
     await contract.methods.withdraw().send({
       from: accounts[0]
     }).then(console.log);
   }
-
+  
   render() {
     if (!this.state.web3) {
       return <div className="Wait">Wait... Now don't get hastey!</div>;
@@ -106,15 +131,17 @@
       return (
         <Container className="text-center">
           <h1>SPLITTER</h1>
-          <Container >
+          <Container>
             <Card>
               <Card.Header className="text-center">
                 <h3>Contract Balance: <span className="badge badge-secondary">{this.state.contractBal}</span> ETH </h3>
                 <hr style={{ width:"95%" }}/>
                 <h3>User Balance: <span className="badge badge-secondary">{this.state.userBal}</span> ETH </h3>
               </Card.Header>
-                <br />
-                <Card.Title className="text-center"><label htmlFor="bob">Recipient 1: </label></Card.Title>
+
+              {/* Recipient 1 Input */}
+              <div style={{ padding: "2%" }}>
+              <Card.Title className="text-center"><label htmlFor="bob">Recipient 1: </label></Card.Title>
                 <input
                   autoComplete="off"
                   name="bob"
@@ -124,7 +151,9 @@
                   style={{width: "95%", margin: "auto"}}
                   placeholder="Example Ethereum Address: 0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
                 />
-                <br />
+              </div>
+              {/* Recipient 2 Input */}
+              <div style={{ padding: "2%" }}>
                 <Card.Title className="text-center"><label htmlFor="carol">Recipient 2: </label></Card.Title>
                 <input
                   autoComplete="off"
@@ -135,38 +164,43 @@
                   style={{width: "95%", margin: "auto"}}
                   placeholder="Example Ethereum Address: 0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
                 />
-                <br />
+              </div>
+              {/* Recipient 3 Input */}
+              <div style={{ padding: "2%" }}>
                 <Card.Title className="text-center"><label htmlFor="amount">Split Amount (Ξ): </label></Card.Title>
                 <input
                   className="form-control text-center"
                   id="amount"
                   onChange={this.handleInput}
-                  style={{width: "95%", margin: "auto"}}
+                  style={{width: "95%", margin: "auto" }}
                   autoComplete="off"
                   name="amount"
                   placeholder="Amount to split in ETH"
                 />
-                <br />
+              </div>
             </Card>
           </Container>
+
           <Container>
+            {/* Split Button */}
             <ButtonToolbar>
               <Button variant="warning" size="lg" block
-                onClick={this.handleSplit}>
-                SPLIT <span role="img" aria-label="sheep">✂️</span>
+                onClick={ this.handleSplit }>SPLIT <span role="img" aria-label="sheep">✂️</span>
               </Button>
             </ButtonToolbar>
+            {/* Withdraw Button */}
             <ButtonToolbar>
               <Button size="lg" block
                 htmlFor="withdrawAmount" 
                 variant="danger"
-                onClick={this.handleWithdraw}>
-                  WITHDRAW <span role="img" aria-label="sheep">💰</span>
+                onClick={this.handleWithdraw}>WITHDRAW <span role="img" aria-label="sheep">💰</span>
               </Button>
             </ButtonToolbar>
           </Container>
+
           <Container>
             <Card>
+              {/* Instructions */}
               <Card.Body>
                 The contract Splitter is used to split funds 
                 from the sender in two equal parts and then 
