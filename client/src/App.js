@@ -6,6 +6,7 @@
   import Button from 'react-bootstrap/Button';
   import ButtonToolbar from "react-bootstrap/ButtonToolbar";
   import Card from 'react-bootstrap/Card';
+  import MetaMaskLogo from './download-metamask.png'
 
   class App extends Component {
     
@@ -28,13 +29,13 @@
     componentDidMount = async () => {
       try {
         // Get network provider and web3 instance.
-        const web3 = await getWeb3();
+        const web3 = await getWeb3()
 
         // Use web3 to get the user's accounts.
-        const accounts = await web3.eth.getAccounts();
+        const accounts = await web3.eth.getAccounts()
         
         // Get the contract instance.
-        const networkId = await web3.eth.net.getId();
+        const networkId = await web3.eth.net.getId()
         const deployedNetwork = Splitter.networks[networkId];
         const instance = new web3.eth.Contract(
           Splitter.abi,
@@ -44,71 +45,63 @@
         // Set web3, accounts, and contract to the state, and then proceed with an
         // example of interacting with the contract's methods.
         this.setState({ web3, accounts, contract: instance, address: deployedNetwork.address }, () => {
-          this.handleContractBalance();
-          this.handleRecipientBalance();
+          this.handleContractBalance()
+          this.handleRecipientBalance()
         });
 
       } catch (error) {
-        // Catch any errors for any of the above operations.
         alert(
           `Failed to load web3, accounts, or contract. Check console for details.`,
         );
-        console.error(error);
+        console.error(error)
       }
     };
 
   handleContractBalance = async () => {
-    let { web3, address } = this.state;
-    let balance = await web3.eth.getBalance(address);
-    let contractBalance = web3.utils.fromWei(balance, 'ether');
-    this.setState({ contractBal: contractBalance });
+    const { web3, address } = this.state
+    const balance = await web3.eth.getBalance(address)
+    const contractBalance = web3.utils.fromWei(balance, 'ether')
+    this.setState({ contractBal: contractBalance })
   }
 
   handleRecipientBalance = async () => {
-    let { accounts, web3 } = this.state;
-    let userAccount = await web3.eth.getBalance(accounts[0]);
-    let userBalance = web3.utils.fromWei(userAccount, 'ether');
+    const { accounts, web3 } = this.state;
+    const userAccount = await web3.eth.getBalance(accounts[0])
+    const userBalance = web3.utils.fromWei(userAccount, 'ether')
     // let bobBalance = await web3.eth.getBalance(bob);
     // bobBalance = web3.utils.fromWei(bobBalance, 'ether');
     // let carolBalance = await web3.eth.getBalance(carol);
     // carolBalance = web3.utils.fromWei(carolBalance, 'ether');
-    this.setState({ userBal: userBalance });
+    this.setState({ userBal: userBalance })
   }
 
-  // Need to figure out multiple event handlers on 1 onClick
   handleUpdateBalance = async () => {
-    this.handleRecipientBalance();
-    this.handleContractBalance();
+    this.handleRecipientBalance()
+    this.handleContractBalance()
   }
 
   handleInput = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
+    this.setState({ [event.target.name]: event.target.value })
   };
 
-  // Need to update contract and account balance
   handleSplit = async () => {
-    let { accounts, contract, bob, carol, amount, web3 } = this.state;
-    const ethAmount = web3.utils.toWei(amount);
+    const { accounts, contract, bob, carol, amount, web3 } = this.state
+    const ethAmount = web3.utils.toWei(amount)
     try {
-      const splitSuccess = await contract.methods.split(
-        bob, 
-        carol
-      ).call({
-        from: accounts[0],
-        value: ethAmount
-      })
+      const splitSuccess = await contract.methods
+        .split(bob, carol)
+        .call({from: accounts[0],value: ethAmount})
 
       if (splitSuccess) {
-        await contract.methods.split(
-          bob,
-          carol
-        ).send({
-          from: accounts[0],
-          value: ethAmount
-        })
-        // I don't think these are working .on()
-        .on('transactionHash', txHash => this.setState({ txHash: txHash }))
-        .on('receipt', receipt => this.setState({ txReceipt: receipt}))
+        await contract.methods
+          .split(bob, carol)
+          .send({from: accounts[0], value: ethAmount})
+          .then(console.log)
+          // Need to check these further .on()
+          .on('transactionHash on its way', txHash => this.setState({ txHash: txHash }))
+          .on('receipt', receipt => this.setState({ txReceipt: receipt}))
+
+        this.handleUpdateBalance()
       }
     } catch(err) {
       alert('Split failed!')
@@ -116,12 +109,10 @@
     }
   }
 
-  // Need to update contract and account balance
   handleWithdraw = async () => {
-    let { accounts, contract } = this.state;
-    await contract.methods.withdraw().send({
-      from: accounts[0]
-    }).then(console.log);
+    const { accounts, contract } = this.state
+    await contract.methods.withdraw().send({from: accounts[0]}).then(console.log)
+    this.handleUpdateBalance()
   }
   
   render() {
@@ -135,6 +126,8 @@
             <Card>
               <Card.Header className="text-center">
                 <h3>Contract Balance: <span className="badge badge-secondary">{this.state.contractBal}</span> ETH </h3>
+                <hr style={{ width:"95%" }}/>
+                <h3>Account: <span className="badge badge-secondary">{this.state.accounts[0]}</span></h3>
                 <hr style={{ width:"95%" }}/>
                 <h3>User Balance: <span className="badge badge-secondary">{this.state.userBal}</span> ETH </h3>
               </Card.Header>
@@ -165,7 +158,7 @@
                   placeholder="Example Ethereum Address: 0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7"
                 />
               </div>
-              {/* Recipient 3 Input */}
+              {/* Split Amount Input */}
               <div style={{ padding: "2%" }}>
                 <Card.Title className="text-center"><label htmlFor="amount">Split Amount (Ξ): </label></Card.Title>
                 <input
@@ -188,6 +181,7 @@
                 onClick={ this.handleSplit }>SPLIT <span role="img" aria-label="sheep">✂️</span>
               </Button>
             </ButtonToolbar>
+
             {/* Withdraw Button */}
             <ButtonToolbar>
               <Button size="lg" block
@@ -213,8 +207,15 @@
               </Card.Body>
             </Card>
           </Container>
+
+          <Container>
+            <br />
+            <a href='https://metamask.io/'>
+              <img src={MetaMaskLogo} alt='MetaMask Download' />
+            </a>
+          </Container>
         </Container>
-      );
+      )
     }
   }
 
