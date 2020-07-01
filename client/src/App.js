@@ -84,7 +84,7 @@
     this.setState({ [event.target.name]: event.target.value })
   };
 
-  handleSplit = async () => {
+handleSplit = async () => {
     const { accounts, contract, bob, carol, amount, web3 } = this.state
     const ethAmount = web3.utils.toWei(amount)
     try {
@@ -96,12 +96,20 @@
         await contract.methods
           .split(bob, carol)
           .send({from: accounts[0], value: ethAmount})
-          .then(console.log)
-          // Need to check these further .on()
-          .on('transactionHash on its way', txHash => this.setState({ txHash: txHash }))
-          .on('receipt', receipt => this.setState({ txReceipt: receipt}))
-
-        this.handleUpdateBalance()
+          .on('transactionHash', hash => {
+            this.setState({
+              message: `Transaction pending... ${hash}`,
+            })
+            console.log(this.state.message);
+          })
+          .on('receipt', receipt => {
+            this.setState({
+                txReceipt: receipt,
+                message: 'Transaction has been mined...',
+            })
+            console.log(this.state.message, receipt)
+            this.handleUpdateBalance()
+          })
       }
     } catch(err) {
       alert('Split failed!')
