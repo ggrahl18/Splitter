@@ -22,7 +22,6 @@ contract Splitter is Pausable {
 		// Security checks
 		require(msg.value > 0 && bob != carol, "split rejected, please try again");
 
-		uint balance = msg.value;
 		// IF theirs a remainder, refund it back to the sender
 		if (msg.value % 2 != 0) {
 			owedBalances[msg.sender] = owedBalances[msg.sender].add(1);
@@ -41,7 +40,7 @@ contract Splitter is Pausable {
 		uint splitBalance = owedBalances[msg.sender];
 		owedBalances[msg.sender] = 0;
 		emit LogWithdraw(msg.sender, splitBalance);
-		msg.sender.transfer(splitBalance);
+    msg.sender.call.value(splitBalance)
 		return true;
 	}
 }
