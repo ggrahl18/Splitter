@@ -39,7 +39,7 @@
         const deployedNetwork = Splitter.networks[networkId];
         const instance = new web3.eth.Contract(
           Splitter.abi,
-          deployedNetwork && deployedNetwork.address,
+          deployedNetwork.address,
         );
 
         // Set web3, accounts, and contract to the state, and then proceed with an
@@ -84,7 +84,7 @@
     this.setState({ [event.target.name]: event.target.value })
   };
 
-handleSplit = async () => {
+  handleSplit = async () => {
     const { accounts, contract, bob, carol, amount, web3 } = this.state
     const ethAmount = web3.utils.toWei(amount)
     try {
