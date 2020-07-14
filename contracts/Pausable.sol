@@ -4,32 +4,37 @@ import "./Ownable.sol";
 
 contract Pausable is Ownable {
 
-    event LogPaused(address indexed sender);
-    event LogResumed(address indexed sender);
+    bool private isPaused;
 
-    bool private _isPaused;
+    event Paused(address indexed sender);
+    event Unpaused(address indexed sender);
 
-    constructor() public {
-        _isPaused = false;
+    constructor() internal {
+        isPaused = false;
+    }
+
+    // returns true if contract is paused, false if not paused
+    function paused() public view returns (bool) {
+      return _isPaused;
     }
 
     modifier currentlyRunning() {
-        require(!_isPaused, "The contract is currently paused");
+        require(!isPaused, "The contract is currently paused");
         _;
     }
 
     modifier currentlyPaused() {
-        require(_isPaused, "The contract is currently running");
+        require(isPaused, "The contract is currently running");
         _;
     }
 
     function pause() public onlyAlice currentlyRunning {
-        _isPaused = true;
-        emit LogPaused(msg.sender);
+        isPaused = true;
+        emit Paused(msg.sender);
     }
 
     function resume() public onlyAlice currentlyPaused {
-        _isPaused = false;
-        emit LogResumed(msg.sender);
+        isPaused = false;
+        emit Unpaused(msg.sender);
     }
 }
