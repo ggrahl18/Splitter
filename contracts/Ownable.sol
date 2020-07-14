@@ -2,30 +2,30 @@ pragma solidity ^0.5.12;
 
 contract Ownable {
 
-    address private alice;
+    address private owner;
 
-    event LogNewOwner(address indexed sender, address indexed originalAlice, address indexed newAlice);
+    event LogNewOwner(address indexed sender, address indexed originalOwner, address indexed newOwner);
 
     constructor() public {
-        alice = msg.sender;
+        owner = msg.sender;
     }
 
-    modifier onlyAlice() {
+    modifier onlyOwner() {
         require(
-            msg.sender == alice,
+            msg.sender == owner,
             "Only owner can call this function."
         );
         _;
     }
 
-    function changeAlice(address payable _newAlice) public onlyAlice returns(bool success) {
-        require(_newAlice != address(0), "The new Alice cannot be the same as the original Alice.");
-        emit LogNewOwner(msg.sender, alice, _newAlice);
-        alice = _newAlice;
+    function changeOwner(address payable _newOwner) public onlyOwner returns(bool success) {
+        require(_newOwner != address(0), "The new Owner cannot be the same as the original Owner.");
+        emit LogNewOwner(msg.sender, owner, _newOwner);
+        owner = _newOwner;
         return true;
 	}
 
-    function getAlice() public view returns (address) {
-        return alice;
+    function getOwner() public view returns (address) {
+        return owner;
     }
 }
