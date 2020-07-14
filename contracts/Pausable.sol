@@ -28,12 +28,12 @@ contract Pausable is Ownable {
         _;
     }
 
-    function pause() public onlyAlice currentlyRunning {
+    function pause() public onlyOwner currentlyRunning {
         isPaused = true;
         emit Paused(msg.sender);
     }
 
-    function resume() public onlyAlice currentlyPaused {
+    function resume() public onlyOwner currentlyPaused {
         isPaused = false;
         emit Unpaused(msg.sender);
     }
